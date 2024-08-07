@@ -35,6 +35,18 @@ class BaseAgent(Agent):
                 self.model.schedule.remove(mate)
                 break
 
+    @check_pos
+    def reproduce(self, mate_model):
+        cellmates = self.model.grid.get_cell_list_contents([self.pos])
+        for mate in cellmates:
+            if isinstance(mate, mate_model) and mate != self:
+                # Reproduzir se encontrar outro da mesma espécie
+                new_pos = self.random.choice(self.model.grid.get_neighborhood(self.pos, moore=True, include_center=False))
+                new_agent = mate_model(self.model.next_id(), new_pos, self.model)
+                self.model.grid.place_agent(new_agent, new_pos)
+                self.model.schedule.add(new_agent)
+                break
+
 class Plant(BaseAgent):
     def __init__(self, unique_id, pos, model):
         super().__init__(unique_id, model)
@@ -64,3 +76,4 @@ class Carnivore(BaseAgent):
     def step(self):
         self.move()
         self.eat(Herbivore)
+        self.reproduce(Carnivore)

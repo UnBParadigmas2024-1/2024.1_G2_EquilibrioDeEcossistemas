@@ -15,7 +15,7 @@ def agent_portrayal(agent):
     return portrayal
 
 def run():
-    grid = CanvasGrid(agent_portrayal, 20, 20, 500, 500)
+    grid = CanvasGrid(agent_portrayal, 50, 50, 500, 500)
     chart = ChartModule(
         [{"Label": "Plantas", "Color": "green"},
          {"Label": "Herbívoros", "Color": "blue"},

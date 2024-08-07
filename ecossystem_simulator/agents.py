@@ -25,7 +25,7 @@ class BaseAgent(Agent):
 class Plant(BaseAgent):
     def __init__(self, unique_id, pos, model):
         super().__init__(unique_id, model)
-        self.pos = pos
+        # self.pos = pos
 
     def step(self):
         if self.random.random() < 0.01:  # 1% chance de reprodução a cada passo
@@ -37,7 +37,7 @@ class Plant(BaseAgent):
 class Herbivore(BaseAgent):
     def __init__(self, unique_id, pos, model):
         super().__init__(unique_id, model)
-        self.pos = pos
+        # self.pos = pos
 
     def step(self):
         self.move()
@@ -46,7 +46,7 @@ class Herbivore(BaseAgent):
 class Carnivore(BaseAgent):
     def __init__(self, unique_id, pos, model):
         super().__init__(unique_id, model)
-        self.pos = pos
+        # self.pos = pos
 
     def step(self):
         self.move()

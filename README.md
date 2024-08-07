@@ -93,3 +93,4 @@ Segue a tabela com as participações de cada membro do grupo no projeto.
 
 > Linguagem de programação: https://www.python.org/;
 > Interface gráfica (Mesa): https://mesa.readthedocs.io/en/stable/;
+> Inspiração: https://github.com/UnBParadigmas2023-2/2023.2_G6_SMA_PresaPredador/tree/main

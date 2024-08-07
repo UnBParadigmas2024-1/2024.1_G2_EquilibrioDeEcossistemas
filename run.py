@@ -1,3 +1,4 @@
-import mesa
+from ecossystem_simulator.server import run
 
-print("hello from grupo 2")
+if __name__ == '__main__':
+    run()

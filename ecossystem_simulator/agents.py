@@ -1,6 +1,15 @@
 from mesa import Agent
 from functools import wraps
 
+def check_pos(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        self = args[0]
+        if self.pos != None:
+            return func(*args, **kwargs)
+        return
+    return wrapper
+
 class BaseAgent(Agent):
     def __init__(self, unique_id, model):
         super().__init__(unique_id, model)
@@ -9,11 +18,15 @@ class BaseAgent(Agent):
     def next_pos(self, dimension):
         return self.random.randrange(dimension)
 
+    @check_pos
     def move(self):
+        # print(self.pos)
         possible_steps = self.model.grid.get_neighborhood(self.pos, moore=True, include_center=False)
         new_position = self.random.choice(possible_steps)
+        # print(possible_steps, new_position)
         self.model.grid.move_agent(self, new_position)
     
+    @check_pos
     def eat(self, prey_model):
         cellmates = self.model.grid.get_cell_list_contents([self.pos])
         for mate in cellmates:

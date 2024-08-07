@@ -2,6 +2,7 @@ from mesa import Model
 from mesa.time import RandomActivation
 from mesa.space import MultiGrid
 from mesa.datacollection import DataCollector
+from typing import Union
 
 from .agents import Plant, Herbivore, Carnivore
 
@@ -43,7 +44,7 @@ class EcosystemModel(Model):
                 count += 1
         return count
 
-    def generate(self, agents_number: int, model: Plant | Herbivore | Carnivore):
+    def generate(self, agents_number: int, model: Union[Plant, Herbivore, Carnivore]):
         for _ in range(agents_number):
             x = self.random.randrange(self.grid.width)
             y = self.random.randrange(self.grid.height)

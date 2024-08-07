@@ -6,16 +6,17 @@ from mesa.datacollection import DataCollector
 from .agents import Plant, Herbivore, Carnivore
 
 class EcosystemModel(Model):
-    def __init__(self, width, height, initial_plants, initial_herbivores, initial_carnivores):
+    def __init__(self, width, height, initial_plants, initial_herbivores, initial_carnivores, plant_reproduction_rate):
         self.width = width
         self.height = height
+        self.plant_reproduction_rate = plant_reproduction_rate
         self.schedule = RandomActivation(self)
         self.grid = MultiGrid(width, height, True)
         self.datacollector = DataCollector(
             {
-                "Plants": lambda m: self.count_type(m, Plant),
-                "Herbivores": lambda m: self.count_type(m, Herbivore),
-                "Carnivores": lambda m: self.count_type(m, Carnivore),
+                "Plantas": lambda m: self.count_type(m, Plant),
+                "Herbívoros": lambda m: self.count_type(m, Herbivore),
+                "Carnívoros": lambda m: self.count_type(m, Carnivore),
             }
         )
         self.current_id = 0

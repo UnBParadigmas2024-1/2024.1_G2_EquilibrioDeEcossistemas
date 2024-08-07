@@ -41,7 +41,7 @@ class Plant(BaseAgent):
         # self.pos = pos
 
     def step(self):
-        if self.random.random() < 0.01:  # 1% chance de reprodução a cada passo
+        if self.random.random() < self.model.plant_reproduction_rate:  # chance de reprodução a cada passo
             new_pos = (self.next_pos(self.model.grid.width), self.next_pos(self.model.grid.height))
             new_plant = Plant(self.model.next_id(), new_pos, self.model)
             self.model.grid.place_agent(new_plant, new_pos)

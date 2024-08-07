@@ -17,15 +17,15 @@ def agent_portrayal(agent):
 def run():
     grid = CanvasGrid(agent_portrayal, 20, 20, 500, 500)
     chart = ChartModule(
-        [{"Label": "Plants", "Color": "green"},
-         {"Label": "Herbivores", "Color": "blue"},
-         {"Label": "Carnivores", "Color": "red"}]
+        [{"Label": "Plantas", "Color": "green"},
+         {"Label": "Herbívoros", "Color": "blue"},
+         {"Label": "Carnívoros", "Color": "red"}]
     )
 
     model_params = {
         "initial_plants": mesa.visualization.Slider(
             name="Número de Plantas",
-            value=10,
+            value=30,
             min_value=0,
             max_value=100,
             step=1,
@@ -33,7 +33,7 @@ def run():
         ),
         "initial_carnivores": mesa.visualization.Slider(
             name="Número de Carnívoros",
-            value=10,
+            value=5,
             min_value=0,
             max_value=100,
             step=1,
@@ -41,11 +41,19 @@ def run():
         ),
         "initial_herbivores": mesa.visualization.Slider(
             name="Número de Herbívoros",
-            value=10,
+            value=15,
             min_value=0,
             max_value=100,
             step=1,
             description="Escollha quantos herbívoros incluir no modelo",
+        ),
+        "plant_reproduction_rate": mesa.visualization.Slider(
+            name="Taxa de Reprodução das Plantas",
+            value=0.01,
+            min_value=0,
+            max_value=1,
+            step=0.01,
+            description="Escolha a taxa de reprodução das plantas",
         ),
         "width": 20,
         "height": 20,
@@ -54,7 +62,7 @@ def run():
     server = ModularServer(
         EcosystemModel,
         [grid, chart],
-        "Ecosystem Simulation",
+        "Simulador de Ecossistema",
         model_params
     )
 

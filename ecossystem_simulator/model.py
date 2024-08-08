@@ -27,6 +27,9 @@ class EcosystemModel(Model):
         self.step_count = 0
         self.season = "Primavera"  # Iniciar na Primavera
 
+        # Criando a matriz de nutrientes
+        self.nutrient_grid = [[0 for _ in range(height)] for _ in range(width)]
+
         # Criando as plantas
         self.generate(initial_plants, Plant)
         # Criando os herbívoros
@@ -37,6 +40,14 @@ class EcosystemModel(Model):
         self.running = True
         self.datacollector.collect(self)
 
+    def add_nutrient(self, pos, amount):
+        x, y = pos
+        self.nutrient_grid[x][y] += amount
+
+    def get_nutrient(self, pos):
+        x, y = pos
+        return self.nutrient_grid[x][y]
+
     def step(self):
         self.schedule.step()
         self.datacollector.collect(self)
@@ -46,34 +57,9 @@ class EcosystemModel(Model):
         if self.step_count % self.steps_per_season == 0:
             self.change_season()
 
-    def change_season(self):
-        if self.season == "Primavera":
-            self.season = "Verão"
-            self.plant_reproduction_rate *= 1  # Taxa normal
-        elif self.season == "Verão":
-            self.season = "Outono"
-            self.plant_reproduction_rate *= 0.7  # Reduzir a taxa de reprodução
-        elif self.season == "Outono":
-            self.season = "Inverno"
-            self.plant_reproduction_rate *= 0.3  # Reduzir mais ainda
-        elif self.season == "Inverno":
-            self.season = "Primavera"
-            self.plant_reproduction_rate *= 2  # Aumentar a taxa de reprodução na primavera
+        # Reduzir nutrientes gradualmente
+        for x in range(self.width):
+            for y in range(self.height):
+                if self.nutrient_grid[x][y] > 0:
+                    self.nutrient_grid[x][y] -= 1  # Nutrientes diminuem ao longo do tempo
 
-        print(f"Estação atual: {self.season}")
-
-    @staticmethod
-    def count_type(model, agent_type):
-        count = 0
-        for agent in model.schedule.agents:
-            if isinstance(agent, agent_type):
-                count += 1
-        return count
-
-    def generate(self, agents_number: int, model: Union[Plant, Herbivore, Carnivore]):
-        for _ in range(agents_number):
-            x = self.random.randrange(self.grid.width)
-            y = self.random.randrange(self.grid.height)
-            agent = model(self.next_id(), (x, y), self)
-            self.grid.place_agent(agent, (x, y))
-            self.schedule.add(agent)

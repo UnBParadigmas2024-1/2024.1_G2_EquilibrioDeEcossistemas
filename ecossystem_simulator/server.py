@@ -71,6 +71,14 @@ def run():
             step=1,
             description="Escolha o número máximo de descendentes gerados na reprodução",
         ),
+        "steps_per_season": mesa.visualization.Slider(
+            name="Passos por Estação",
+            value=100,
+            min_value=10,
+            max_value=1000,
+            step=10,
+            description="Número de passos antes de mudar a estação",
+        ),
         "width": 50,
         "height": 50,
     }

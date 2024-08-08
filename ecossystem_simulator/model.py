@@ -14,8 +14,6 @@ class EcosystemModel(Model):
         self.carnivore_reproduction_rate = carnivore_reproduction_rate
         self.max_offspring = max_offspring
         self.steps_per_season = steps_per_season
-        self.current_step = 0
-        self.season = "Summer"
         self.schedule = RandomActivation(self)
         self.grid = MultiGrid(width, height, True)
         self.datacollector = DataCollector(
@@ -26,6 +24,8 @@ class EcosystemModel(Model):
             }
         )
         self.current_id = 0
+        self.step_count = 0
+        self.season = "Primavera"  # Iniciar na Primavera
 
         # Criando as plantas
         self.generate(initial_plants, Plant)
@@ -40,27 +40,27 @@ class EcosystemModel(Model):
     def step(self):
         self.schedule.step()
         self.datacollector.collect(self)
-        self.current_step += 1
+        self.step_count += 1
 
-        # Alterar a estação após um número fixo de passos
-        if self.current_step % self.steps_per_season == 0:
+        # Mudar de estação após um número específico de passos
+        if self.step_count % self.steps_per_season == 0:
             self.change_season()
 
     def change_season(self):
-        if self.season == "Summer":
-            self.season = "Winter"
-        else:
-            self.season = "Summer"
+        if self.season == "Primavera":
+            self.season = "Verão"
+            self.plant_reproduction_rate *= 1  # Taxa normal
+        elif self.season == "Verão":
+            self.season = "Outono"
+            self.plant_reproduction_rate *= 0.7  # Reduzir a taxa de reprodução
+        elif self.season == "Outono":
+            self.season = "Inverno"
+            self.plant_reproduction_rate *= 0.3  # Reduzir mais ainda
+        elif self.season == "Inverno":
+            self.season = "Primavera"
+            self.plant_reproduction_rate *= 2  # Aumentar a taxa de reprodução na primavera
 
-        # Ajustar taxas baseadas na estação
-        if self.season == "Summer":
-            # Taxa de reprodução no verão
-            self.plant_reproduction_rate = 0.1  
-            self.carnivore_reproduction_rate = 0.05
-        else:
-            # Taxa de reprodução no inverno
-            self.plant_reproduction_rate = 0.01  
-            self.carnivore_reproduction_rate = 0.01 
+        print(f"Estação atual: {self.season}")
 
     @staticmethod
     def count_type(model, agent_type):
@@ -77,7 +77,3 @@ class EcosystemModel(Model):
             agent = model(self.next_id(), (x, y), self)
             self.grid.place_agent(agent, (x, y))
             self.schedule.add(agent)
-
-    def next_id(self):
-        self.current_id += 1
-        return self.current_id

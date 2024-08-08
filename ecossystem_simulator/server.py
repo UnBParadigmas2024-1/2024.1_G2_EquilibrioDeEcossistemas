@@ -55,8 +55,24 @@ def run():
             step=0.01,
             description="Escolha a taxa de reprodução das plantas",
         ),
-        "width": 20,
-        "height": 20,
+        "carnivore_reproduction_rate": mesa.visualization.Slider(
+            name="Taxa de Reprodução dos Carnívoros",
+            value=0.5,
+            min_value=0,
+            max_value=10,
+            step=0.1,
+            description="Escolha a taxa de reprodução dos carnívoros",
+        ),
+        "max_offspring": mesa.visualization.Slider(
+            name="Número Máximo de Descendentes",
+            value=2,
+            min_value=1,
+            max_value=5,
+            step=1,
+            description="Escolha o número máximo de descendentes gerados na reprodução",
+        ),
+        "width": 50,
+        "height": 50,
     }
 
     server = ModularServer(

@@ -35,16 +35,23 @@ class BaseAgent(Agent):
                 self.model.schedule.remove(mate)
                 break
 
+    # Função decorada com check_pos para garantir que o agente tem uma posição válida
     @check_pos
-    def reproduce(self, mate_model):
+    def reproduce(self, mate_model, reproduction_rate, max_offspring):
+        # Verifica se há agentes do mesmo tipo na célula
         cellmates = self.model.grid.get_cell_list_contents([self.pos])
         for mate in cellmates:
+            # Se houver, verifica se o agente é do tipo correto e se não é ele mesmo
             if isinstance(mate, mate_model) and mate != self:
-                # Reproduzir se encontrar outro da mesma espécie
-                new_pos = self.random.choice(self.model.grid.get_neighborhood(self.pos, moore=True, include_center=False))
-                new_agent = mate_model(self.model.next_id(), new_pos, self.model)
-                self.model.grid.place_agent(new_agent, new_pos)
-                self.model.schedule.add(new_agent)
+                # Se for, gera um número aleatório e verifica se é menor que a taxa de reprodução
+                if self.random.random() < reproduction_rate:
+                    # Se for, gera um número aleatório de descendentes e os coloca na vizinhança
+                    num_offspring = self.random.randint(1, max_offspring)
+                    for _ in range(num_offspring):
+                        new_pos = self.random.choice(self.model.grid.get_neighborhood(self.pos, moore=True, include_center=False))
+                        new_agent = mate_model(self.model.next_id(), new_pos, self.model)
+                        self.model.grid.place_agent(new_agent, new_pos)
+                        self.model.schedule.add(new_agent)
                 break
 
 class Plant(BaseAgent):
@@ -76,4 +83,6 @@ class Carnivore(BaseAgent):
     def step(self):
         self.move()
         self.eat(Herbivore)
-        self.reproduce(Carnivore)
+        self.reproduce(Carnivore, self.model.carnivore_reproduction_rate, self.model.max_offspring)
+
+    

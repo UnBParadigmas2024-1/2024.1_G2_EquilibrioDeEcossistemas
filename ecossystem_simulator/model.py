@@ -7,10 +7,12 @@ from typing import Union
 from .agents import Plant, Herbivore, Carnivore
 
 class EcosystemModel(Model):
-    def __init__(self, width, height, initial_plants, initial_herbivores, initial_carnivores, plant_reproduction_rate):
+    def __init__(self, width, height, initial_plants, initial_herbivores, initial_carnivores, plant_reproduction_rate, carnivore_reproduction_rate, max_offspring):
         self.width = width
         self.height = height
         self.plant_reproduction_rate = plant_reproduction_rate
+        self.carnivore_reproduction_rate = carnivore_reproduction_rate
+        self.max_offspring = max_offspring
         self.schedule = RandomActivation(self)
         self.grid = MultiGrid(width, height, True)
         self.datacollector = DataCollector(

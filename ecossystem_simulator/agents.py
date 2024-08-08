@@ -91,11 +91,13 @@ class Plant(BaseAgent):
         super().__init__(unique_id, model)
 
     def step(self):
-        if self.random.random() < self.model.plant_reproduction_rate:
+        nutrients = self.model.get_nutrient(self.pos)
+        if self.random.random() < self.model.plant_reproduction_rate + (nutrients * 0.01):
             new_pos = (self.next_pos(self.model.grid.width), self.next_pos(self.model.grid.height))
             new_plant = Plant(self.model.next_id(), new_pos, self.model)
             self.model.grid.place_agent(new_plant, new_pos)
             self.model.schedule.add(new_plant)
+
 
 class Herbivore(BaseAgent):
     def __init__(self, unique_id, pos, model):
@@ -104,6 +106,10 @@ class Herbivore(BaseAgent):
     def step(self):
         self.move(target_class=Plant)
         self.eat(Plant)
+        if self.random.random() < 0.05: 
+            self.model.add_nutrient(self.pos, 5)  
+            self.model.grid.remove_agent(self)
+            self.model.schedule.remove(self)
 
 class Carnivore(BaseAgent):
     def __init__(self, unique_id, pos, model):
@@ -113,3 +119,7 @@ class Carnivore(BaseAgent):
         self.move(target_class=Herbivore)
         self.eat(Herbivore)
         self.reproduce(Carnivore, self.model.carnivore_reproduction_rate, self.model.max_offspring)
+        if self.random.random() < 0.05: 
+            self.model.add_nutrient(self.pos, 10) 
+            self.model.grid.remove_agent(self)
+            self.model.schedule.remove(self)

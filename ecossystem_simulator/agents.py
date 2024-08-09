@@ -1,6 +1,7 @@
 from mesa import Agent
 from functools import wraps
 import math
+import random
 
 def check_pos(func):
     @wraps(func)
@@ -12,9 +13,21 @@ def check_pos(func):
     return wrapper
 
 class BaseAgent(Agent):
-    def __init__(self, unique_id, model):
+    def __init__(self, unique_id, model, speed=1.0, reproduction_rate=0.5):
         super().__init__(unique_id, model)
         self.model = model
+        self.speed = speed  # Velocidade do agente
+        self.reproduction_rate = reproduction_rate  # Taxa de reprodução
+        self.fitness = 0 
+
+    def calculate_fitness(self):
+        # Calcula a fitness com base nas características
+        self.fitness = self.speed + self.reproduction_rate
+
+    def inherit_traits(self, parent1, parent2):
+        # Herdar características dos pais com mutação
+        self.speed = (parent1.speed + parent2.speed) / 2 + random.uniform(-0.1, 0.1)
+        self.reproduction_rate = (parent1.reproduction_rate + parent2.reproduction_rate) / 2 + random.uniform(-0.1, 0.1)
 
     def next_pos(self, dimension):
         return self.random.randrange(dimension)
@@ -100,25 +113,52 @@ class Plant(BaseAgent):
 
 
 class Herbivore(BaseAgent):
-    def __init__(self, unique_id, pos, model):
-        super().__init__(unique_id, model)
+    def __init__(self, unique_id, pos, model, speed=1.0, reproduction_rate=0.5):
+        super().__init__(unique_id, model, speed, reproduction_rate)
 
     def step(self):
         self.move(target_class=Plant)
         self.eat(Plant)
+        self.reproduce(Herbivore, self.reproduction_rate, self.model.max_offspring)
+        self.calculate_fitness()
         if self.random.random() < 0.05: 
             self.model.add_nutrient(self.pos, 5)  
             self.model.grid.remove_agent(self)
             self.model.schedule.remove(self)
 
+    def reproduce(self, mate_model, reproduction_rate, max_offspring):
+        print(f"Reproduzindo na posição {self.pos}")
+        if self.pos is None:
+            print("Erro: posição do agente é None.")
+            return
+        
+        if not hasattr(self.model, 'grid') or self.model.grid is None:
+            print("Erro: grid não está definida no modelo.")
+            return
+        
+        cellmates = self.model.grid.get_cell_list_contents([self.pos])
+
+        for mate in cellmates:
+            if isinstance(mate, mate_model) and mate != self:
+                if self.random.random() < reproduction_rate:
+                    num_offspring = self.random.randint(1, max_offspring)
+                    for _ in range(num_offspring):
+                        new_pos = self.random.choice(self.model.grid.get_neighborhood(self.pos, moore=True, include_center=False))
+                        new_agent = mate_model(self.model.next_id(), new_pos, self.model)
+                        self.model.grid.place_agent(new_agent, new_pos)
+                        self.model.schedule.add(new_agent)
+                break
+
 class Carnivore(BaseAgent):
-    def __init__(self, unique_id, pos, model):
-        super().__init__(unique_id, model)
+    def __init__(self, unique_id, pos, model, speed=1.0, reproduction_rate=0.5):
+        super().__init__(unique_id, model, speed, reproduction_rate)
 
     def step(self):
         self.move(target_class=Herbivore)
         self.eat(Herbivore)
         self.reproduce(Carnivore, self.model.carnivore_reproduction_rate, self.model.max_offspring)
+        self.reproduce(Carnivore, self.reproduction_rate, self.model.max_offspring)
+        self.calculate_fitness()
         if self.random.random() < 0.05: 
             self.model.add_nutrient(self.pos, 10) 
             self.model.grid.remove_agent(self)

@@ -115,7 +115,7 @@ class Herbivore(BaseAgent):
         super().__init__(unique_id, model, speed, reproduction_rate)
 
     def step(self):
-        if self.random.random() < 0.01:  # 1% chance to die
+        if self.random.random() < 0.01:
             self.die()
             return
 
@@ -125,10 +125,10 @@ class Herbivore(BaseAgent):
         self.calculate_fitness()
 
     def die(self):
-        if self.pos is not None:
-            self.model.grid.remove_agent(self)
-            self.model.schedule.remove(self)
-            self.model.increase_growth_chance(self.pos)  # Increase the growth chance for plants
+        pos_at_death = self.pos
+        self.model.grid.remove_agent(self)
+        self.model.schedule.remove(self)
+        self.model.increase_growth_chance(pos_at_death)
 
 
     def reproduce(self, mate_model, reproduction_rate, max_offspring):
@@ -160,7 +160,7 @@ class Carnivore(BaseAgent):
         super().__init__(unique_id, model, speed, reproduction_rate)
 
     def step(self):
-        if self.random.random() < 0.01:  # 1% chance to die
+        if self.random.random() < 0.01:
             self.die()
             return
 
@@ -170,7 +170,7 @@ class Carnivore(BaseAgent):
         self.calculate_fitness()
 
     def die(self):
-        if self.pos is not None:
-            self.model.grid.remove_agent(self)
-            self.model.schedule.remove(self)
-            self.model.increase_growth_chance(self.pos)  # Increase the growth chance for plants
+        pos_at_death = self.pos
+        self.model.grid.remove_agent(self)
+        self.model.schedule.remove(self)
+        self.model.increase_growth_chance(pos_at_death)

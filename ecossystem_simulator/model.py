@@ -3,6 +3,7 @@ from mesa.time import RandomActivation
 from mesa.space import MultiGrid
 from mesa.datacollection import DataCollector
 from typing import Union
+import time
 
 from .agents import Plant, Herbivore, Carnivore
 
@@ -40,6 +41,7 @@ class EcosystemModel(Model):
         self.datacollector.collect(self)
 
     def increase_growth_chance(self, pos):
+        print(f"Posição fértil: {pos}")
         if pos in self.fertile_spots:
             self.fertile_spots[pos] += 0.2
         else:

@@ -156,12 +156,17 @@ class Herbivore(BaseAgent):
 
 
 class Carnivore(BaseAgent):
-    def __init__(self, unique_id, pos, model, speed=1.0, reproduction_rate=0.5, min_age_for_reproduction=30):
+    def __init__(self, unique_id, pos, model, speed=1.0, reproduction_rate=0.5, min_age_for_reproduction=20 , max_age=70):
         super().__init__(unique_id, model, speed, reproduction_rate)
         self.age = 0  # Inicializa a idade do carnívoro
         self.min_age_for_reproduction = min_age_for_reproduction  # Idade mínima para reprodução
+        self.max_age = max_age  # Idade máxima antes de morrer
 
     def step(self):
+        if self.age >= self.max_age:
+            self.die()
+            return
+
         self.age += 1  # Incrementa a idade do carnívoro a cada passo
 
         if self.random.random() < 0.01:

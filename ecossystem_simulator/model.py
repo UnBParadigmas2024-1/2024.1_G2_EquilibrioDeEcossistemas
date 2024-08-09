@@ -27,6 +27,8 @@ class EcosystemModel(Model):
         self.step_count = 0
         self.season = "Primavera"  # Iniciar na Primavera
 
+        self.fertile_spots = {}  # Posições férteis
+
         # Criando as plantas
         self.generate(initial_plants, Plant)
         # Criando os herbívoros
@@ -37,14 +39,31 @@ class EcosystemModel(Model):
         self.running = True
         self.datacollector.collect(self)
 
+    def increase_growth_chance(self, pos):
+        if pos in self.fertile_spots:
+            self.fertile_spots[pos] += 0.2
+        else:
+            self.fertile_spots[pos] = 0.2
+
     def step(self):
         self.schedule.step()
         self.datacollector.collect(self)
         self.step_count += 1
 
-        # Mudar de estação após um número específico de passos
+        # Handle plant growth in fertile spots
+        for pos, growth_bonus in self.fertile_spots.items():
+            if pos is not None and self.random.random() < (self.plant_reproduction_rate + growth_bonus):
+                if self.grid.is_cell_empty(pos):  # Ensure the position is not None and is valid
+                    new_plant = Plant(self.next_id(), pos, self)
+                    self.grid.place_agent(new_plant, pos)
+                    self.schedule.add(new_plant)
+        
+        self.fertile_spots.clear()  # Reset fertile spots each step
+
+        # Change season after a specific number of steps
         if self.step_count % self.steps_per_season == 0:
             self.change_season()
+
 
     def change_season(self):
         if self.season == "Primavera":

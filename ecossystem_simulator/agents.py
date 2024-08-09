@@ -115,10 +115,21 @@ class Herbivore(BaseAgent):
         super().__init__(unique_id, model, speed, reproduction_rate)
 
     def step(self):
+        if self.random.random() < 0.01:  # 1% chance to die
+            self.die()
+            return
+
         self.move(target_class=Plant)
         self.eat(Plant)
         self.reproduce(Herbivore, self.reproduction_rate, self.model.max_offspring)
         self.calculate_fitness()
+
+    def die(self):
+        if self.pos is not None:
+            self.model.grid.remove_agent(self)
+            self.model.schedule.remove(self)
+            self.model.increase_growth_chance(self.pos)  # Increase the growth chance for plants
+
 
     def reproduce(self, mate_model, reproduction_rate, max_offspring):
         print(f"Reproduzindo na posição {self.pos}")
@@ -149,7 +160,17 @@ class Carnivore(BaseAgent):
         super().__init__(unique_id, model, speed, reproduction_rate)
 
     def step(self):
+        if self.random.random() < 0.01:  # 1% chance to die
+            self.die()
+            return
+
         self.move(target_class=Herbivore)
         self.eat(Herbivore)
         self.reproduce(Carnivore, self.reproduction_rate, self.model.max_offspring)
         self.calculate_fitness()
+
+    def die(self):
+        if self.pos is not None:
+            self.model.grid.remove_agent(self)
+            self.model.schedule.remove(self)
+            self.model.increase_growth_chance(self.pos)  # Increase the growth chance for plants

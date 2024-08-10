@@ -113,9 +113,10 @@ class Plant(BaseAgent):
 class Herbivore(BaseAgent):
     def __init__(self, unique_id, pos, model, speed=1.0, reproduction_rate=0.5):
         super().__init__(unique_id, model, speed, reproduction_rate)
+        self.sex = random.choice(["male", "female"])  # Atribui aleatoriamente o sexo
 
     def step(self):
-        if self.random.random() < 0.01:
+        if self.random.random() < 0.001:
             self.die()
             return
 
@@ -145,13 +146,14 @@ class Herbivore(BaseAgent):
 
         for mate in cellmates:
             if isinstance(mate, mate_model) and mate != self:
-                if self.random.random() < reproduction_rate:
-                    num_offspring = self.random.randint(1, max_offspring)
-                    for _ in range(num_offspring):
-                        new_pos = self.random.choice(self.model.grid.get_neighborhood(self.pos, moore=True, include_center=False))
-                        new_agent = mate_model(self.model.next_id(), new_pos, self.model)
-                        self.model.grid.place_agent(new_agent, new_pos)
-                        self.model.schedule.add(new_agent)
+                if self.sex != mate.sex:  # Somente se os sexos forem opostos
+                    if self.random.random() < reproduction_rate:
+                        num_offspring = self.random.randint(1, max_offspring)
+                        for _ in range(num_offspring):
+                            new_pos = self.random.choice(self.model.grid.get_neighborhood(self.pos, moore=True, include_center=False))
+                            new_agent = mate_model(self.model.next_id(), new_pos, self.model)
+                            self.model.grid.place_agent(new_agent, new_pos)
+                            self.model.schedule.add(new_agent)
                 break
 
 
@@ -161,6 +163,7 @@ class Carnivore(BaseAgent):
         self.age = 0  # Inicializa a idade do carnívoro
         self.min_age_for_reproduction = min_age_for_reproduction  # Idade mínima para reprodução
         self.max_age = max_age  # Idade máxima antes de morrer
+        self.sex = random.choice(["male", "female"])  # Atribui aleatoriamente o sexo
 
     def step(self):
         if self.age >= self.max_age:
@@ -169,7 +172,7 @@ class Carnivore(BaseAgent):
 
         self.age += 1  # Incrementa a idade do carnívoro a cada passo
 
-        if self.random.random() < 0.01:
+        if self.random.random() < 0.001:
             self.die()
             return
 
@@ -189,15 +192,16 @@ class Carnivore(BaseAgent):
         if self.age < self.min_age_for_reproduction:
             return  # Se a idade é menor que a mínima, não se reproduz
         
-        # Código de reprodução original
+        # Código de reprodução modificado para considerar sexo
         cellmates = self.model.grid.get_cell_list_contents([self.pos])
         for mate in cellmates:
             if isinstance(mate, mate_model) and mate != self:
-                if self.random.random() < reproduction_rate:
-                    num_offspring = self.random.randint(1, max_offspring)
-                    for _ in range(num_offspring):
-                        new_pos = self.random.choice(self.model.grid.get_neighborhood(self.pos, moore=True, include_center=False))
-                        new_agent = mate_model(self.model.next_id(), new_pos, self.model)
-                        self.model.grid.place_agent(new_agent, new_pos)
-                        self.model.schedule.add(new_agent)
+                if self.sex != mate.sex:  # Somente se os sexos forem opostos
+                    if self.random.random() < reproduction_rate:
+                        num_offspring = self.random.randint(1, max_offspring)
+                        for _ in range(num_offspring):
+                            new_pos = self.random.choice(self.model.grid.get_neighborhood(self.pos, moore=True, include_center=False))
+                            new_agent = mate_model(self.model.next_id(), new_pos, self.model)
+                            self.model.grid.place_agent(new_agent, new_pos)
+                            self.model.schedule.add(new_agent)
                 break

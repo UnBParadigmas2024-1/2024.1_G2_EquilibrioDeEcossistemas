@@ -70,7 +70,6 @@ class Herbivore(BaseAgent):
         except Exception as e:
             print(e)
 
-        print(f"Herbívoro na posição {self.pos} com idade {self.age} tentando reproduzir")
         self.reproduce(Herbivore, self.reproduction_rate, self.model.max_offspring)
         self.calculate_fitness()
 
@@ -87,10 +86,8 @@ class Herbivore(BaseAgent):
         for mate in cellmates:
             if isinstance(mate, mate_model) and mate != self:
                 if self.sex != mate.sex:  # Somente se os sexos forem opostos
-                    print(f"Encontrou parceiro(a) na posição {self.pos}")
                     if self.random.random() < reproduction_rate:
                         num_offspring = self.random.randint(1, max_offspring)
-                        print(f"Reproduzindo {num_offspring} novos herbívoros")
                         for _ in range(num_offspring):
                             new_pos = self.random.choice(self.model.grid.get_neighborhood(self.pos, moore=True, include_center=False))
                             new_agent = mate_model(self.model.next_id(), new_pos, self.model)

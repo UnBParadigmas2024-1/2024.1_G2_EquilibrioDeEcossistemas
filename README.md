@@ -71,7 +71,7 @@ Segue a tabela com as participações de cada membro do grupo no projeto.
 |Nome do Membro | Contribuição | Significância da Contribuição para o Projeto (Excelente/Boa/Regular/Ruim/Nula) |
 | -- | -- | -- |
 |Ailton Aires| - | - |
-|Arthur Sena| - | - |
+|Arthur Sena| - Setup da aplicação com ambiente virtual e Makefile <br/> - Adição da consciência aos herbívoros, de forma que, aleatoriamente, alguns deles, tenham a capacidade de fugir de predadores <br/> - Adição de memória aos herbívoros, de forma que os mesmos priorizem locais onde já viram plantas anteriormente, ao invés de sempre se moverem aleatoriamente <br/> - Criação da lógica de plantas venenosas, que adoecem os herbívoros <br/> - Criação de lógica de animais doentes e idosos que serão mais afetados por fome ou envenenamento <br/> - Refatoração do pacote de agentes, modularizando o código e facilitando a manutenibilidade | Excelente |
 |Eric Chagas|  - | - |
 |Fernando Vargas|  - | - |
 |Gabriel Gomes|  - | - |

@@ -1,29 +1,8 @@
 from mesa.visualization.modules import CanvasGrid, ChartModule
-from mesa.visualization.ModularVisualization import ModularServer
 from mesa.visualization import Slider
-from .model import EcosystemModel
-from .agents import Plant, Herbivore, Carnivore
-from mesa.visualization.modules import TextElement
-
-
-class SeasonTextElement(TextElement):
-    def __init__(self):
-        pass
-
-    def render(self, model):
-        colors = {
-            "Primavera": "green",
-            "Verão": "orange",
-            "Outono": "brown",
-            "Inverno": "blue"
-        }
-
-        color = colors.get(model.season, "black")
-
-        return (
-            f'<span style="color: black; font-weight: bold; font-size: 20px;">Estação Atual:</span> '
-            f'<span style="color: {color}; font-weight: bold; font-size: 20px;">{model.season}</span>'
-        )
+from ecossystem_simulator.agents.plant import Plant
+from ecossystem_simulator.agents.herbivore import Herbivore
+from ecossystem_simulator.agents.carnivore import Carnivore
 
 def agent_portrayal(agent):
     if isinstance(agent, Plant):
@@ -34,17 +13,8 @@ def agent_portrayal(agent):
         portrayal = {"Shape": "circle", "Color": "red", "Filled": "true", "r": 1, "Layer": 1}
     return portrayal
 
-def run():
-    grid = CanvasGrid(agent_portrayal, 50, 50, 500, 500)
-    chart = ChartModule(
-        [{"Label": "Plantas", "Color": "green"},
-         {"Label": "Herbívoros", "Color": "blue"},
-         {"Label": "Carnívoros", "Color": "red"}]
-    )
-
-    season_text = SeasonTextElement()
-
-    model_params = {
+def create_sliders():
+    return {
         "initial_plants": Slider(
             name="Número de Plantas",
             value=60,
@@ -59,7 +29,7 @@ def run():
             min_value=0,
             max_value=500,
             step=1,
-            description="Escollha quantos carnívoros incluir no modelo",
+            description="Escolha quantos carnívoros incluir no modelo",
         ),
         "initial_herbivores": Slider(
             name="Número de Herbívoros",
@@ -67,7 +37,7 @@ def run():
             min_value=0,
             max_value=650,
             step=1,
-            description="Escollha quantos herbívoros incluir no modelo",
+            description="Escolha quantos herbívoros incluir no modelo",
         ),
         "plant_reproduction_rate": Slider(
             name="Taxa de Reprodução das Plantas",
@@ -104,13 +74,3 @@ def run():
         "width": 50,
         "height": 50,
     }
-
-    server = ModularServer(
-        EcosystemModel,
-        [season_text, grid, chart],
-        "Simulador de Ecossistema",
-        model_params
-    )
-
-    server.port = 8521
-    server.launch()

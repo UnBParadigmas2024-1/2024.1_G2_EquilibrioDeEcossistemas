@@ -1,11 +1,11 @@
 from mesa import Model
 from mesa.time import RandomActivation
 from mesa.space import MultiGrid
-from mesa.datacollection import DataCollector
+from ecossystem_simulator.models.data_collection import DataCollector
+from ecossystem_simulator.agents.plant import Plant
+from ecossystem_simulator.agents.herbivore import Herbivore
+from ecossystem_simulator.agents.carnivore import Carnivore
 from typing import Union
-import time
-
-from .agents import Plant, Herbivore, Carnivore
 
 class EcosystemModel(Model):
     def __init__(self, width, height, initial_plants, initial_herbivores, initial_carnivores, plant_reproduction_rate, carnivore_reproduction_rate, max_offspring, steps_per_season):
@@ -26,15 +26,12 @@ class EcosystemModel(Model):
         )
         self.current_id = 0
         self.step_count = 0
-        self.season = "Primavera"  # Iniciar na Primavera
+        self.season = "Primavera"
 
-        self.fertile_spots = {}  # Posições férteis
+        self.fertile_spots = {}
 
-        # Criando as plantas
         self.generate(initial_plants, Plant)
-        # Criando os herbívoros
         self.generate(initial_herbivores, Herbivore)
-        # Criando os carnívoros
         self.generate(initial_carnivores, Carnivore)
 
         self.running = True
@@ -52,33 +49,31 @@ class EcosystemModel(Model):
         self.datacollector.collect(self)
         self.step_count += 1
 
-        # Handle plant growth in fertile spots
         for pos, growth_bonus in self.fertile_spots.items():
             if pos is not None and self.random.random() < (self.plant_reproduction_rate + growth_bonus):
-                if self.grid.is_cell_empty(pos):  # Ensure the position is not None and is valid
+                if self.grid.is_cell_empty(pos):
                     new_plant = Plant(self.next_id(), pos, self)
                     self.grid.place_agent(new_plant, pos)
                     self.schedule.add(new_plant)
         
-        self.fertile_spots.clear()  # Reset fertile spots each step
+        self.fertile_spots.clear()
 
-        # Change season after a specific number of steps
         if self.step_count % self.steps_per_season == 0:
             self.change_season()
 
     def change_season(self):
         if self.season == "Primavera":
             self.season = "Verão"
-            self.plant_reproduction_rate *= 1  # Taxa normal
+            self.plant_reproduction_rate *= 1
         elif self.season == "Verão":
             self.season = "Outono"
-            self.plant_reproduction_rate *= 0.7  # Reduzir a taxa de reprodução
+            self.plant_reproduction_rate *= 0.7
         elif self.season == "Outono":
             self.season = "Inverno"
-            self.plant_reproduction_rate *= 0.3  # Reduzir mais ainda
+            self.plant_reproduction_rate *= 0.3
         elif self.season == "Inverno":
             self.season = "Primavera"
-            self.plant_reproduction_rate *= 2  # Aumentar a taxa de reprodução na primavera
+            self.plant_reproduction_rate *= 2
 
         print(f"Estação atual: {self.season}")
 

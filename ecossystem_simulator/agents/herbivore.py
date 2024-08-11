@@ -2,6 +2,7 @@ from .base_agent import BaseAgent
 from .plant import Plant
 import random
 
+
 class Herbivore(BaseAgent):
     def __init__(self, unique_id, pos, model, speed=1.0, reproduction_rate=0.5, hunger_threshold=10, max_age=70):
         super().__init__(unique_id, model, speed, reproduction_rate)
@@ -69,29 +70,34 @@ class Herbivore(BaseAgent):
         except Exception as e:
             print(e)
 
+        print(f"Herbívoro na posição {self.pos} com idade {self.age} tentando reproduzir")
         self.reproduce(Herbivore, self.reproduction_rate, self.model.max_offspring)
         self.calculate_fitness()
 
     def reproduce(self, mate_model, reproduction_rate, max_offspring):
-        print(f"Reproduzindo na posição {self.pos}")
+        print(f"Tentando reproduzir na posição {self.pos} com taxa de reprodução {reproduction_rate}")
         if self.pos is None:
             print("Erro: posição do agente é None.")
             return
-        
         if not hasattr(self.model, 'grid') or self.model.grid is None:
             print("Erro: grid não está definida no modelo.")
             return
-        
         cellmates = self.model.grid.get_cell_list_contents([self.pos])
 
         for mate in cellmates:
             if isinstance(mate, mate_model) and mate != self:
                 if self.sex != mate.sex:  # Somente se os sexos forem opostos
+                    print(f"Encontrou parceiro(a) na posição {self.pos}")
                     if self.random.random() < reproduction_rate:
                         num_offspring = self.random.randint(1, max_offspring)
+                        print(f"Reproduzindo {num_offspring} novos herbívoros")
                         for _ in range(num_offspring):
                             new_pos = self.random.choice(self.model.grid.get_neighborhood(self.pos, moore=True, include_center=False))
                             new_agent = mate_model(self.model.next_id(), new_pos, self.model)
                             self.model.grid.place_agent(new_agent, new_pos)
                             self.model.schedule.add(new_agent)
+                    else:
+                        print("Taxa de reprodução não atingida, reprodução falhou")
+                else:
+                    print("Parceiros do mesmo sexo encontrados, não podem se reproduzir")
                 break

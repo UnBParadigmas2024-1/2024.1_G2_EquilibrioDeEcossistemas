@@ -8,10 +8,11 @@ from ecossystem_simulator.agents.carnivore import Carnivore
 from typing import Union
 
 class EcosystemModel(Model):
-    def __init__(self, width, height, initial_plants, initial_herbivores, initial_carnivores, plant_reproduction_rate, carnivore_reproduction_rate, max_offspring, steps_per_season):
+    def __init__(self, width, height, initial_plants, initial_herbivores, initial_carnivores, plant_reproduction_rate, herbivore_reproduction_rate, carnivore_reproduction_rate, max_offspring, steps_per_season):
         self.width = width
         self.height = height
         self.plant_reproduction_rate = plant_reproduction_rate
+        self.herbivore_reproduction_rate = herbivore_reproduction_rate
         self.carnivore_reproduction_rate = carnivore_reproduction_rate
         self.max_offspring = max_offspring
         self.steps_per_season = steps_per_season
@@ -89,6 +90,12 @@ class EcosystemModel(Model):
         for _ in range(agents_number):
             x = self.random.randrange(self.grid.width)
             y = self.random.randrange(self.grid.height)
-            agent = model(self.next_id(), (x, y), self)
+            if model == Herbivore:
+                agent = model(self.next_id(), (x, y), self, reproduction_rate=self.herbivore_reproduction_rate)
+            elif model == Carnivore:
+                agent = model(self.next_id(), (x, y), self, reproduction_rate=self.carnivore_reproduction_rate)
+            else: 
+                agent = model(self.next_id(), (x, y), self)
+
             self.grid.place_agent(agent, (x, y))
             self.schedule.add(agent)

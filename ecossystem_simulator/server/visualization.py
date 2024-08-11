@@ -78,6 +78,14 @@ def create_sliders():
             step=0.01,
             description="Escolha a taxa de reprodução das plantas",
         ),
+        "herbivore_reproduction_rate": Slider(
+            name="Taxa de Reprodução dos Herbívoros",
+            value=0.5,
+            min_value=0,
+            max_value=10,
+            step=0.1,
+            description="Escolha a taxa de reprodução dos herbívoros",
+        ),
         "carnivore_reproduction_rate": Slider(
             name="Taxa de Reprodução dos Carnívoros",
             value=0.5,

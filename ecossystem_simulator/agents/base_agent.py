@@ -83,10 +83,41 @@ class BaseAgent(Agent):
                 self.hunger = 0
 
                 from .plant import Plant # Importa localmente para evitar importação cíclica
+                # Plantas venenosas devem matar idosos ou doentes
+                # Plantas normais devem recuperar a saúde de quem estiver doente
                 if isinstance(mate, Plant):
-                    if mate.is_poisonous:
-                        print("Herbívoro comeu planta venenosa e morreu")
-                        self.die()
+                    is_plant_poisonous = mate.is_poisonous
+                    is_animal_old = self.is_old()
+                    is_animal_ill = self.is_ill
+
+                    if is_plant_poisonous:
+                        if is_animal_old or is_animal_ill:
+                            print("Herbívoro idoso/doente comeu planta venenosa e morreu")
+                            self.die()
+                        else:
+                            print("Herbívoro comeu planta venenosa e ficou doente")
+                            self.is_ill = True
+                    else: 
+                        if is_animal_ill:
+                            print("Herbívoro doente comeu planta e se recuperou")
+                            self.is_ill = False
+                else:
+                    is_prey_ill = mate.is_ill
+                    is_predator_old = self.is_old()
+                    is_predator_ill = self.is_ill
+
+                    if is_prey_ill:
+                        if is_predator_old or is_predator_ill:
+                            print("Carnívoro idoso/doente comeu outro animal doente e morreu")
+                            self.die()
+                        else:
+                            print("Carnívoro comeu animal doente e ficou doente também")
+                            self.is_ill = True
+                    else: 
+                        if is_predator_ill:
+                            print("Herbívoro doente comeu presa saudável e se recuperou")
+                            self.is_ill = False
+
 
                 break
 

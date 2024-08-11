@@ -77,7 +77,7 @@ Segue a tabela com as participações de cada membro do grupo no projeto.
 |Gabriel Gomes|  - | - |
 |Guilherme Daniel|  - | - |
 |Kevin Luis|  - | - |
-|Victor Buendia|  - | - |
+|Victor Buendia| Excelente | - Criação da estrutura do SMA usando o Mesa</br> - Criação do servidor</br> - Criação do modelo do ecossistema</br> - Criação do agente herbívoro, carnívoro e planta</br> - Criação do agente base para herança dos agentes específicos |
 
 ## Outros 
 

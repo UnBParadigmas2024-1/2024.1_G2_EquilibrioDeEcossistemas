@@ -18,11 +18,21 @@ class Herbivore(BaseAgent):
         return (self.age / self.max_age) >= 0.75
 
     def step(self):
+        if self.is_ill and self.is_old():
+            print("Animal idoso ficou doente e morreu")
+            self.die()
+            return
+
+        if self.hunger >= (self.hunger_threshold * 0.8) and self.is_old():
+            print("Animal idoso morreu de fome")
+            self.die()
+            return
+
         if self.hunger >= self.hunger_threshold:
             self.die()
             return
 
-        self.hunger += 1 
+        self.hunger += 1
 
         if self.age >= self.max_age:
             self.die()
@@ -36,7 +46,7 @@ class Herbivore(BaseAgent):
 
         try:
             # Verifica se o herbívoro é consciente e se há predadores por perto
-            if self.is_aware:
+            if self.is_aware and not self.is_old and not self.is_ill:
                 from .carnivore import Carnivore  # Importa localmente para evitar importação cíclica
                 predator_pos = self.find_nearest_target(Carnivore)
                 if predator_pos and self.get_distance(self.pos, predator_pos) < 5:  # Foge se o predador estiver a uma distância menor que 5

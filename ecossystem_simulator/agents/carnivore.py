@@ -16,6 +16,16 @@ class Carnivore(BaseAgent):
         return (self.age / self.max_age) >= 0.75
     
     def step(self):
+        if self.is_ill and self.is_old():
+            print("Animal idoso ficou doente e morreu")
+            self.die()
+            return
+
+        if self.hunger >= (self.hunger_threshold * 0.8) and self.is_old():
+            print("Animal idoso morreu de fome")
+            self.die()
+            return
+
         if self.hunger >= self.hunger_threshold:
             self.die()
             return

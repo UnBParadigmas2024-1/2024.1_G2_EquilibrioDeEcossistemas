@@ -2,7 +2,7 @@ from .base_agent import BaseAgent
 import random
 
 class Carnivore(BaseAgent):
-    def __init__(self, unique_id, pos, model, speed=1.5, reproduction_rate=0.5, min_age_for_reproduction=20, max_age=70, hunger_threshold=10):
+    def __init__(self, unique_id, pos, model, speed=1.5, reproduction_rate=0.5, min_age_for_reproduction=12, max_age=100, hunger_threshold=50):
         super().__init__(unique_id, model, speed, reproduction_rate)
         self.age = 0  # Inicializa a idade do carnívoro
         self.min_age_for_reproduction = min_age_for_reproduction  # Idade mínima para reprodução

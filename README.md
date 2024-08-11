@@ -76,7 +76,7 @@ Segue a tabela com as participações de cada membro do grupo no projeto.
 |Fernando Vargas|  - | - |
 |Gabriel Gomes|  - | - |
 |Guilherme Daniel|  - | - |
-|Kevin Luis|  - | - |
+|Kevin Luis| - Reprodução dos carnívoros e uma função de reprodução genérica no agente base <br /> - Validações para reprodução dos carnívoros <br /> - Condições para morte de um carnívoro <br /> - Configurações de parametros dinâmicos (Taxa de reprodução e número máximo de descendentes) | Excelente |
 |Victor Buendia| - Criação da estrutura do SMA usando o Mesa</br> - Criação do servidor</br> - Criação do modelo do ecossistema</br> - Criação do agente herbívoro, carnívoro e planta</br> - Criação do agente base para herança dos agentes específicos | Excelente |
 
 ## Outros 

@@ -2,8 +2,28 @@ from mesa.visualization.modules import CanvasGrid, ChartModule
 from mesa.visualization.ModularVisualization import ModularServer
 from .model import EcosystemModel
 from .agents import Plant, Herbivore, Carnivore
+from mesa.visualization.modules import TextElement
 
 import mesa
+
+class SeasonTextElement(TextElement):
+    def __init__(self):
+        pass
+
+    def render(self, model):
+        colors = {
+            "Primavera": "green",
+            "Verão": "orange",
+            "Outono": "brown",
+            "Inverno": "blue"
+        }
+
+        color = colors.get(model.season, "black")
+
+        return (
+            f'<span style="color: black; font-weight: bold; font-size: 20px;">Estação Atual:</span> '
+            f'<span style="color: {color}; font-weight: bold; font-size: 20px;">{model.season}</span>'
+        )
 
 def agent_portrayal(agent):
     if isinstance(agent, Plant):
@@ -21,6 +41,8 @@ def run():
          {"Label": "Herbívoros", "Color": "blue"},
          {"Label": "Carnívoros", "Color": "red"}]
     )
+
+    season_text = SeasonTextElement()
 
     model_params = {
         "initial_plants": mesa.visualization.Slider(
@@ -85,7 +107,7 @@ def run():
 
     server = ModularServer(
         EcosystemModel,
-        [grid, chart],
+        [season_text, grid, chart],
         "Simulador de Ecossistema",
         model_params
     )

@@ -6,12 +6,14 @@ from ecossystem_simulator.agents.carnivore import Carnivore
 
 def agent_portrayal(agent):
     if isinstance(agent, Plant):
-        portrayal = {"Shape": "circle", "Color": "green", "Filled": "true", "r": 0.5, "Layer": 1}
+        portrayal = {"Shape": "circle", "Color": "green", "r": 0.5, "Layer": 1, "text": "🌱", "text_color": "green"}
     elif isinstance(agent, Herbivore):
-        portrayal = {"Shape": "circle", "Color": "blue", "Filled": "true", "r": 1, "Layer": 1}
+        portrayal = {"Shape": "circle", "Color": "blue", "r": 1, "Layer": 2, "text": "🐄", "text_color": "blue"}
     elif isinstance(agent, Carnivore):
-        portrayal = {"Shape": "circle", "Color": "red", "Filled": "true", "r": 1, "Layer": 1}
+        portrayal = {"Shape": "circle", "Color": "red", "r": 1, "Layer": 3, "text": "🦁", "text_color": "red"}
     return portrayal
+
+
 
 def create_sliders():
     return {

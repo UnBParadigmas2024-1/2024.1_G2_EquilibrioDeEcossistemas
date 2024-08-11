@@ -37,7 +37,7 @@ class Herbivore(BaseAgent):
 
         if self.age >= self.max_age:
             if self.random.random() < 0.5:
-            self.die()
+                self.die()
             return
             
         self.age += 1  # Incrementa a idade do herbívoro a cada passo

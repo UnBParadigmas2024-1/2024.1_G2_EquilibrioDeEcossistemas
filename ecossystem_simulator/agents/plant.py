@@ -1,4 +1,4 @@
-from .base_agent import BaseAgent
+from ecossystem_simulator.agents.base_agent import BaseAgent
 import random
 
 class Plant(BaseAgent):

@@ -83,6 +83,7 @@ class BaseAgent(Agent):
             if isinstance(mate, prey_model):
                 self.model.grid.remove_agent(mate)
                 self.model.schedule.remove(mate)
+                self.hunger = 0
                 break
 
     @check_pos
@@ -111,11 +112,27 @@ class Plant(BaseAgent):
             self.model.schedule.add(new_plant)
 
 class Herbivore(BaseAgent):
-    def __init__(self, unique_id, pos, model, speed=1.0, reproduction_rate=0.5):
+    def __init__(self, unique_id, pos, model, speed=1.0, reproduction_rate=0.5, hunger_threshold=10, max_age=70):
         super().__init__(unique_id, model, speed, reproduction_rate)
+        self.age = 0
+        self.max_age = max_age
         self.sex = random.choice(["male", "female"])  # Atribui aleatoriamente o sexo
+        self.hunger = 0  # Inicializa o nível de fome
+        self.hunger_threshold = hunger_threshold  # Limite de fome para morte
 
     def step(self):
+        if self.hunger >= self.hunger_threshold:
+            self.die()
+            return
+
+        self.hunger += 1 
+
+        if self.age >= self.max_age:
+            self.die()
+            return
+
+        self.age += 1  # Incrementa a idade do carnívoro a cada passo
+
         if self.random.random() < 0.001:
             self.die()
             return
@@ -158,14 +175,22 @@ class Herbivore(BaseAgent):
 
 
 class Carnivore(BaseAgent):
-    def __init__(self, unique_id, pos, model, speed=1.0, reproduction_rate=0.5, min_age_for_reproduction=20 , max_age=70):
+    def __init__(self, unique_id, pos, model, speed=1.5, reproduction_rate=0.5, min_age_for_reproduction=20 , max_age=70, hunger_threshold=10):
         super().__init__(unique_id, model, speed, reproduction_rate)
         self.age = 0  # Inicializa a idade do carnívoro
         self.min_age_for_reproduction = min_age_for_reproduction  # Idade mínima para reprodução
         self.max_age = max_age  # Idade máxima antes de morrer
         self.sex = random.choice(["male", "female"])  # Atribui aleatoriamente o sexo
+        self.hunger = 0  # Inicializa o nível de fome
+        self.hunger_threshold = hunger_threshold  # Limite de fome para morte
 
     def step(self):
+        if self.hunger >= self.hunger_threshold:
+            self.die()
+            return
+
+        self.hunger += 1
+
         if self.age >= self.max_age:
             self.die()
             return

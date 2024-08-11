@@ -129,6 +129,7 @@ class Herbivore(BaseAgent):
         self.is_aware = random.choice([False, True, False])  # Define aleatoriamente se o herbívoro é consciente com maiores chances de não ser
         self.hunger = 0  # Inicializa o nível de fome
         self.hunger_threshold = hunger_threshold  # Limite de fome para morte
+        self.memory = []  # Lista de memória para guardar posições de plantas
 
     def step(self):
         if self.hunger >= self.hunger_threshold:
@@ -141,34 +142,47 @@ class Herbivore(BaseAgent):
             self.die()
             return
 
-        self.age += 1  # Incrementa a idade do carnívoro a cada passo
+        self.age += 1  # Incrementa a idade do herbívoro a cada passo
 
         if self.random.random() < 0.001:
             self.die()
             return
 
-        # Verifica se o herbívoro é consciente e se há predadores por perto
-        if self.is_aware:
-            try:
+        try:
+            # Verifica se o herbívoro é consciente e se há predadores por perto
+            if self.is_aware:
                 predator_pos = self.find_nearest_target(Carnivore)
                 if predator_pos and self.get_distance(self.pos, predator_pos) < 5:  # Foge se o predador estiver a uma distância menor que 5
                     self.move_away(predator_pos)
                     print("Herbívoro consciente fugiu de um predador")
                     return
-            except Exception as e:
-                print(e)
 
-        # Movimento padrão do herbívoro
-        self.move(prey_class=Plant)
-        self.eat(Plant)
+            # Verifica se há plantas na memória e se move em direção a elas
+            if self.memory:
+                target_pos = self.memory.pop(0)
+                self.move_towards(target_pos)
+                self.eat(Plant)
+            else:
+                # Movimento padrão do herbívoro
+                self.move(prey_class=Plant)
+                plant_pos = self.find_nearest_target(Plant)
+                if plant_pos:
+                    self.memory.append(plant_pos)  # Armazena a posição da planta na memória
+                self.eat(Plant)
+        except Exception as e:
+            print(e)
+
         self.reproduce(Herbivore, self.reproduction_rate, self.model.max_offspring)
         self.calculate_fitness()
 
     def die(self):
-        pos_at_death = self.pos
-        self.model.grid.remove_agent(self)
-        self.model.schedule.remove(self)
-        self.model.increase_growth_chance(pos_at_death)
+        try:
+            pos_at_death = self.pos
+            self.model.grid.remove_agent(self)
+            self.model.schedule.remove(self)
+            self.model.increase_growth_chance(pos_at_death)
+        except Exception as e:
+            print(e)
 
 
     def reproduce(self, mate_model, reproduction_rate, max_offspring):
@@ -229,10 +243,13 @@ class Carnivore(BaseAgent):
         self.calculate_fitness()
 
     def die(self):
-        pos_at_death = self.pos
-        self.model.grid.remove_agent(self)
-        self.model.schedule.remove(self)
-        self.model.increase_growth_chance(pos_at_death)
+        try:
+            pos_at_death = self.pos
+            self.model.grid.remove_agent(self)
+            self.model.schedule.remove(self)
+            self.model.increase_growth_chance(pos_at_death)
+        except Exception as e:
+            print(e)
 
     def reproduce(self, mate_model, reproduction_rate, max_offspring):
         # Verifica se a idade do agente é suficiente para reprodução

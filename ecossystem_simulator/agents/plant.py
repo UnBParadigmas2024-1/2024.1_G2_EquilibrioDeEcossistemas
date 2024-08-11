@@ -1,8 +1,10 @@
 from .base_agent import BaseAgent
+import random
 
 class Plant(BaseAgent):
     def __init__(self, unique_id, pos, model):
         super().__init__(unique_id, model)
+        self.is_poisonous = random.choice([True, False, False]) # inicializa planta venenosa aleatoriamente
 
     def step(self):
         if self.random.random() < self.model.plant_reproduction_rate:

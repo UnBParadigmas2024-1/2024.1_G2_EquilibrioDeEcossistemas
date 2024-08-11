@@ -34,15 +34,6 @@ class Carnivore(BaseAgent):
         self.reproduce(Carnivore, self.reproduction_rate, self.model.max_offspring)
         self.calculate_fitness()
 
-    def die(self):
-        try:
-            pos_at_death = self.pos
-            self.model.grid.remove_agent(self)
-            self.model.schedule.remove(self)
-            self.model.increase_growth_chance(pos_at_death)
-        except Exception as e:
-            print(e)
-
     def reproduce(self, mate_model, reproduction_rate, max_offspring):
         # Verifica se a idade do agente é suficiente para reprodução
         if self.age < self.min_age_for_reproduction:

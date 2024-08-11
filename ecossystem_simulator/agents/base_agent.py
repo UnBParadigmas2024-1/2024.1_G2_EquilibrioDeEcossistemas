@@ -81,6 +81,13 @@ class BaseAgent(Agent):
                 self.model.grid.remove_agent(mate)
                 self.model.schedule.remove(mate)
                 self.hunger = 0
+
+                from .plant import Plant # Importa localmente para evitar importação cíclica
+                if isinstance(mate, Plant):
+                    if mate.is_poisonous:
+                        print("Herbívoro comeu planta venenosa")
+                        self.die()
+
                 break
 
     @check_pos
@@ -96,3 +103,12 @@ class BaseAgent(Agent):
                         self.model.grid.place_agent(new_agent, new_pos)
                         self.model.schedule.add(new_agent)
                 break
+
+    def die(self):
+        try:
+            pos_at_death = self.pos
+            self.model.grid.remove_agent(self)
+            self.model.schedule.remove(self)
+            self.model.increase_growth_chance(pos_at_death)
+        except Exception as e:
+            print(e)

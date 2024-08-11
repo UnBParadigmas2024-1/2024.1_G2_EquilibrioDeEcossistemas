@@ -58,15 +58,6 @@ class Herbivore(BaseAgent):
         self.reproduce(Herbivore, self.reproduction_rate, self.model.max_offspring)
         self.calculate_fitness()
 
-    def die(self):
-        try:
-            pos_at_death = self.pos
-            self.model.grid.remove_agent(self)
-            self.model.schedule.remove(self)
-            self.model.increase_growth_chance(pos_at_death)
-        except Exception as e:
-            print(e)
-
     def reproduce(self, mate_model, reproduction_rate, max_offspring):
         print(f"Reproduzindo na posição {self.pos}")
         if self.pos is None:

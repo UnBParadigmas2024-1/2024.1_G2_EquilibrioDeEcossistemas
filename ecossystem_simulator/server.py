@@ -28,6 +28,8 @@ class SeasonTextElement(TextElement):
 def agent_portrayal(agent):
     if isinstance(agent, Plant):
         portrayal = {"Shape": "circle", "Color": "green", "Filled": "true", "r": 0.5, "Layer": 1}
+        if agent.is_poisonous:
+            portrayal = { **portrayal, "Color": "purple" }
     elif isinstance(agent, Herbivore):
         portrayal = {"Shape": "circle", "Color": "blue", "Filled": "true", "r": 1, "Layer": 1}
     elif isinstance(agent, Carnivore):

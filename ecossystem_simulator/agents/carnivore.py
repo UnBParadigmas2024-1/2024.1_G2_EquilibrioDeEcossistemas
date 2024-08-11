@@ -33,6 +33,7 @@ class Carnivore(BaseAgent):
         self.hunger += 1
 
         if self.age >= self.max_age:
+            if self.random.random() < 0.5:
             self.die()
             return
 

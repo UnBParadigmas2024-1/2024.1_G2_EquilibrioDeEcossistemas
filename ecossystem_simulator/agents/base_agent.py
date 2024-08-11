@@ -85,7 +85,7 @@ class BaseAgent(Agent):
                 from .plant import Plant # Importa localmente para evitar importação cíclica
                 if isinstance(mate, Plant):
                     if mate.is_poisonous:
-                        print("Herbívoro comeu planta venenosa")
+                        print("Herbívoro comeu planta venenosa e morreu")
                         self.die()
 
                 break

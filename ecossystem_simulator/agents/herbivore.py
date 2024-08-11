@@ -12,6 +12,10 @@ class Herbivore(BaseAgent):
         self.hunger = 0  # Inicializa o nível de fome
         self.hunger_threshold = hunger_threshold  # Limite de fome para morte
         self.memory = []  # Lista de memória para guardar posições de plantas
+        self.is_ill = False # Todos animais são inicializados saudáveis
+
+    def is_old(self):
+        return (self.age / self.max_age) >= 0.75
 
     def step(self):
         if self.hunger >= self.hunger_threshold:

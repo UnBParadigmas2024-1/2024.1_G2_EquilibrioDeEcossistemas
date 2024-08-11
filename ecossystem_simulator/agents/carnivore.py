@@ -11,6 +11,9 @@ class Carnivore(BaseAgent):
         self.hunger = 0  # Inicializa o nível de fome
         self.hunger_threshold = hunger_threshold  # Limite de fome para morte
 
+    def is_old(self):
+        return (self.age / self.max_age) >= 0.75
+    
     def step(self):
         if self.hunger >= self.hunger_threshold:
             self.die()

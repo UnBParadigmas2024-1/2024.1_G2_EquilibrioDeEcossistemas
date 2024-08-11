@@ -66,7 +66,6 @@ class EcosystemModel(Model):
         if self.step_count % self.steps_per_season == 0:
             self.change_season()
 
-
     def change_season(self):
         if self.season == "Primavera":
             self.season = "Verão"

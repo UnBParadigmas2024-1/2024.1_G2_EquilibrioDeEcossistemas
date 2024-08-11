@@ -35,7 +35,7 @@ class BaseAgent(Agent):
     def get_distance(self, pos1, pos2):
         return math.sqrt((pos1[0] - pos2[0]) ** 2 + (pos1[1] - pos2[1]) ** 2)
 
-    def find_nearest_target(self, target_class):
+    def find_nearest_target(self, prey_class):
         neighbors = self.model.grid.get_neighborhood(self.pos, moore=True, include_center=False)
         closest_target = None
         closest_distance = float('inf')
@@ -43,7 +43,7 @@ class BaseAgent(Agent):
         for neighbor in neighbors:
             cell_contents = self.model.grid.get_cell_list_contents([neighbor])
             for obj in cell_contents:
-                if isinstance(obj, target_class):
+                if isinstance(obj, prey_class):
                     distance = self.get_distance(self.pos, neighbor)
                     if distance < closest_distance:
                         closest_distance = distance
@@ -63,15 +63,24 @@ class BaseAgent(Agent):
             # Caso não haja alvo próximo, move-se de forma aleatória
             self.move_random()
 
+    def move_away(self, target_pos):
+        # Movimenta o agente na direção oposta à posição do predator
+        if target_pos:
+            # Pega os vizinhos da célula atual
+            neighbors = self.model.grid.get_neighborhood(self.pos, moore=True, include_center=False)
+            # Seleciona o vizinho mais longe da posição do predator
+            next_pos = max(neighbors, key=lambda x: self.get_distance(x, target_pos))
+            self.model.grid.move_agent(self, next_pos)
+
     def move_random(self):
         possible_steps = self.model.grid.get_neighborhood(self.pos, moore=True, include_center=False)
         new_position = self.random.choice(possible_steps)
         self.model.grid.move_agent(self, new_position)
 
     @check_pos
-    def move(self, target_class=None):
-        if target_class:
-            target_pos = self.find_nearest_target(target_class)
+    def move(self, prey_class=None):
+        if prey_class:
+            target_pos = self.find_nearest_target(prey_class)
             self.move_towards(target_pos)
         else:
             self.move_random()
@@ -114,13 +123,26 @@ class Herbivore(BaseAgent):
     def __init__(self, unique_id, pos, model, speed=1.0, reproduction_rate=0.5):
         super().__init__(unique_id, model, speed, reproduction_rate)
         self.sex = random.choice(["male", "female"])  # Atribui aleatoriamente o sexo
-
+        self.is_aware = random.choice([False, True, False])  # Define aleatoriamente se o herbívoro é consciente com maiores chances de não ser
+        
     def step(self):
         if self.random.random() < 0.001:
             self.die()
             return
 
-        self.move(target_class=Plant)
+        # Verifica se o herbívoro é consciente e se há predadores por perto
+        if self.is_aware:
+            try:
+                predator_pos = self.find_nearest_target(Carnivore)
+                if predator_pos and self.get_distance(self.pos, predator_pos) < 5:  # Foge se o predador estiver a uma distância menor que 5
+                    self.move_away(predator_pos)
+                    print("Herbívoro consciente fugiu de um predador")
+                    return
+            except Exception as e:
+                print(e)
+
+        # Movimento padrão do herbívoro
+        self.move(prey_class=Plant)
         self.eat(Plant)
         self.reproduce(Herbivore, self.reproduction_rate, self.model.max_offspring)
         self.calculate_fitness()
@@ -176,7 +198,7 @@ class Carnivore(BaseAgent):
             self.die()
             return
 
-        self.move(target_class=Herbivore)
+        self.move(prey_class=Herbivore)
         self.eat(Herbivore)
         self.reproduce(Carnivore, self.reproduction_rate, self.model.max_offspring)
         self.calculate_fitness()

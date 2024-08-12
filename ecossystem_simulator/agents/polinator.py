@@ -20,8 +20,15 @@ class Pollinator(BaseAgent):
                 self.move_random()
                 self.polen_count += 1
             else:                
-                self.plant_new_plant()
-                self.polen_count = 0
+                neighbors = self.model.grid.get_neighborhood(self.pos, moore=True, include_center=True)
+                for neighbor in neighbors:
+                    cell_contents = self.model.grid.get_cell_list_contents([neighbor])
+                    for obj in cell_contents:
+                        if not isinstance(obj, Plant):
+                            self.plant_new_plant()
+                            self.polen_count = 0
+                        else:
+                            self.move_random()
 
     def collect_pollen(self):
         # Verifica se o polinizador está em uma célula com uma planta

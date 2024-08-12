@@ -114,7 +114,7 @@ Durante a execução do trabalho, foram extraídas as seguintes lições aprendi
 
 - Apesar da facilidade no uso do framework MESA, encontramos diversas dificuldades relacionadas à personalização das telas de simulação.
 
-- O paradígma utiliza os mesmos conceitos utilizados em threads. Por isso, em alguns momentos ele utiliza muitos recursos de hardware, sendo difícil testá-lo em alguns momentos. Além disso, diante dessa limitação, torna-se desafiador pensar em aplicações robustas e escaláveis.
+- O paradígma utiliza os mesmos conceitos utilizados em threads. Por isso, em alguns momentos ele utiliza muitos recursos de hardware, sendo difícil testá-lo. Além disso, diante dessa limitação, torna-se desafiador pensar em aplicações robustas e escaláveis.
 
 - Durante a execução do trabalho, não encontramos uma maneira de alterar algumas configurações do servidor definidas na inicialização da aplicação usando o framework MESA.
 
@@ -128,7 +128,7 @@ Durante a execução do trabalho, foram extraídas as seguintes lições aprendi
 
 ### Contribuições e Fragilidades
 
-- Devido à complexidade de modelar uma aplicação que simule um ecossistema, vide a dificuldade de entender o contexto e definir todas as variáveis que serão utilizadas no sistema, a simulação não apresenta o melhor resultado quanto ao contexto real.
+- Devido à complexidade de modelar uma aplicação que simule um ecossistema, por conta da dificuldade de entender o contexto e definir todas as variáveis que serão utilizadas no sistema, a simulação não apresenta o melhor resultado quanto ao contexto real.
 
 - Apesar dos animais estarem divididos em Carnívoros e Herbívoros, há diversas especificidades dos tipos de animais que não foram abordadas e/ou tratadas nessa aplicação, como expectativa de vida, comportamento social, etc.
 

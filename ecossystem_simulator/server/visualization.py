@@ -49,7 +49,7 @@ def agent_portrayal(agent):
             "Color": "red",
             "r": 1,
             "Layer": 4,
-            "text": "P",
+            "text": "🐝",
             "text_color": "black"
         }
     return portrayal

@@ -46,11 +46,11 @@ def agent_portrayal(agent):
     elif isinstance(agent, Pollinator):
         portrayal = {
             "Shape": "circle",
-            "Color": "red",
+            "Color": "yellow",
             "r": 1,
             "Layer": 4,
             "text": "🐝",
-            "text_color": "black"
+            "text_color": "yellow"
         }
     return portrayal
 

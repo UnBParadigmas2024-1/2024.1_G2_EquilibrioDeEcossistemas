@@ -25,7 +25,8 @@ def run():
     chart = ChartModule(
         [{"Label": "Plantas", "Color": "green"},
          {"Label": "Herbívoros", "Color": "blue"},
-         {"Label": "Carnívoros", "Color": "red"}]
+         {"Label": "Carnívoros", "Color": "red"},
+         {"Label": "Polinizadores",  "Color": "yellow"}]
     )
 
     season_text = SeasonTextElement()

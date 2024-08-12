@@ -1,13 +1,23 @@
 from .base_agent import BaseAgent
 from .plant import Plant
+import random
 
 class Pollinator(BaseAgent):
-    def __init__(self, unique_id, pos, model, polen_count):
-        super().__init__(unique_id, model,polen_count)
+    def __init__(self, unique_id, pos, model, polen_count, max_age=random.randrange(0, 15)):
+        super().__init__(unique_id, model)
         self.carrying_pollen = False  # Indica se o polinizador está carregando pólen
+        self.age = 0
+        self.max_age = max_age
         self.polen_count = 0
 
     def step(self):
+        if self.age >= self.max_age:
+            if random.random() < 0.5:
+                self.die()
+                return
+        else:
+            self.age += 1
+
         from .plant import Plant
     
         if not self.carrying_pollen:
@@ -29,6 +39,9 @@ class Pollinator(BaseAgent):
                             self.polen_count = 0
                         else:
                             self.move_random()
+
+    def is_old(self):
+        return (self.age / self.max_age) >= 0.75
 
     def collect_pollen(self):
         # Verifica se o polinizador está em uma célula com uma planta

@@ -3,20 +3,24 @@ from .plant import Plant
 import random
 
 class Pollinator(BaseAgent):
-    def __init__(self, unique_id, pos, model, polen_count, max_age=random.randrange(0, 15)):
-        super().__init__(unique_id, model)
+    def __init__(self, unique_id, pos, model, max_age=random.randrange(10, 20), reproduction_rate=0.6):
+        super().__init__(unique_id, model, reproduction_rate)
         self.carrying_pollen = False  # Indica se o polinizador está carregando pólen
         self.age = 0
         self.max_age = max_age
         self.polen_count = 0
 
     def step(self):
-        if self.age >= self.max_age:
+        # Logica de morte dos polinizadores
+        if self.age >= self.max_age:  
             if random.random() < 0.5:
                 self.die()
                 return
         else:
             self.age += 1
+
+        if self.age >= (self.max_age * 0.3):
+            self.reproduce(Pollinator, self.reproduction_rate, max_offspring=self.model.max_offspring)
 
         from .plant import Plant
     

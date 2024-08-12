@@ -98,7 +98,7 @@ class EcosystemModel(Model):
             elif model == Carnivore:
                 agent = model(self.next_id(), (x, y), self, reproduction_rate=self.carnivore_reproduction_rate)
             elif model == Pollinator:
-                agent = model(self.next_id(),(x,y), self, polen_count=0)
+                agent = model(self.next_id(),(x,y), self)
             else: 
                 agent = model(self.next_id(), (x, y), self)
 

@@ -148,6 +148,8 @@ Para trabalhos futuros, alguns possíveis incrementos no projeto são:
 
 - Aumentar complexidade da simulação, adicionando características mais específicas ao animais.
 
+- Implementar possibilidade de adicionar espécie invasora no ecossistema.
+
 ## Fontes
 
 > Linguagem de programação: https://www.python.org/;

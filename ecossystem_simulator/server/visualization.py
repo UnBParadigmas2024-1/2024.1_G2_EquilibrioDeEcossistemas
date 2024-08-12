@@ -3,6 +3,7 @@ from mesa.visualization import Slider
 from ecossystem_simulator.agents.plant import Plant
 from ecossystem_simulator.agents.herbivore import Herbivore
 from ecossystem_simulator.agents.carnivore import Carnivore
+from ecossystem_simulator.agents.polinator import Pollinator
 
 def agent_portrayal(agent):
     if isinstance(agent, Plant):
@@ -42,6 +43,15 @@ def agent_portrayal(agent):
             "text": "🦁",
             "text_color": "red"
         }
+    elif isinstance(agent, Pollinator):
+        portrayal = {
+            "Shape": "circle",
+            "Color": "red",
+            "r": 1,
+            "Layer": 4,
+            "text": "P",
+            "text_color": "black"
+        }
     return portrayal
 
 def create_sliders():
@@ -69,6 +79,14 @@ def create_sliders():
             max_value=650,
             step=1,
             description="Escolha quantos herbívoros incluir no modelo",
+        ),
+        "initial_polinators": Slider(
+            name="Número de Polinizadores",
+            value=20,
+            min_value=0,
+            max_value=650,
+            step=1,
+            description="Escolha quantos polinizadores incluir no modelo",
         ),
         "plant_reproduction_rate": Slider(
             name="Taxa de Reprodução das Plantas",

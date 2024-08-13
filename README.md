@@ -89,7 +89,7 @@ make run
 
 |Vídeo|Link|
 |-|-|
-|-|-|
+| Equilíbrio de ecossistemas: Apresentação do módulo SMA | [Apresentacao](https://youtu.be/i2COfWX2m9E) |
 
 ## Participações
 

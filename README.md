@@ -153,6 +153,7 @@ Para trabalhos futuros, alguns possíveis incrementos no projeto são:
 
 ## Fontes
 
-> Linguagem de programação: https://www.python.org/;
-> Interface gráfica (Mesa): https://mesa.readthedocs.io/en/stable/;
-> Inspiração: https://github.com/UnBParadigmas2023-2/2023.2_G6_SMA_PresaPredador/tree/main
+> Linguagem de programação: https://www.python.org/; <br />
+> Interface gráfica (Mesa): https://mesa.readthedocs.io/en/stable/; <br />
+> Inspiração: https://github.com/UnBParadigmas2023-2/2023.2_G6_SMA_PresaPredador/tree/main <br />
+> Distribuição de Carnívoros e Herbívoros: https://www.nature.com/scitable/knowledge/library/dynamics-of-predation-13229468/ <br />

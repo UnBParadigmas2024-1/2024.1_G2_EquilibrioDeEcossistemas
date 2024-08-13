@@ -3,7 +3,7 @@ from .plant import Plant
 import random
 
 class Pollinator(BaseAgent):
-    def __init__(self, unique_id, pos, model, max_age=random.randrange(10, 20), reproduction_rate=0.6):
+    def __init__(self, unique_id, pos, model, max_age=random.randrange(10, 20), reproduction_rate=0.3):
         super().__init__(unique_id, model, reproduction_rate)
         self.carrying_pollen = False  # Indica se o polinizador está carregando pólen
         self.age = 0
